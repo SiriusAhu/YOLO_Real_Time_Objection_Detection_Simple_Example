@@ -10,7 +10,7 @@ WINDOW_NAME = "YOLO REAL TIME OBJECT DETECTION!!!"
 args = argparse.ArgumentParser()
 args.add_argument("-m", "--model", type=str, default="8n", help="Model to use: Enter \"8n\" for YOLOv8n, \"5s\" for YOLOv5s")
 args.add_argument("-v", "--verbose", type=bool, default=False, help="\"True\" or \"False\" | Set to True for verbose output for \"model.predict()\"")
-args.add_argument("-d", "--device", type=int, default=0, help="\"0\" or 1 | Device to use: 0 for CPU, 1 for GPU | If you have more than one GPU, you must be able to modify this code by yourself ^^")
+args.add_argument("-d", "--device", type=int, default=1, help="\"0\" or 1 | Device to use: 0 for CPU, 1 for GPU | If you have more than one GPU, you must be able to modify this code by yourself ^^")
 args.add_argument("-c", "--camera", type=int, default=0, help="Camera to use: 0 for the first camera | Index is based on your system's camera index | Try to change this value if you meet errors")
 args.add_argument("-mf", "--model_folder", type=str, default="models", help="Folder to save the model (under current directory) | Default: \"models\" (created if not exist)")
 
@@ -29,13 +29,15 @@ if not os.path.exists(model_folder):
 
 if device == 0:
     print("- Using CPU.")
+    device = 'cpu'
 else:
     is_cuda_available = torch.cuda.is_available()
     if is_cuda_available:
         print("- Using GPU.")
+        device = 'cuda'
     else:
         print("- Sorry, `torch.cuda.is_available()` returned `False`.")
-        device = 0
+        device = 'cpu'
         print("- Using CPU.")
 
 # Load the model: If not found, it will be downloaded to *current directory*
@@ -49,7 +51,7 @@ while cap.isOpened():
     ret, frame = cap.read()
 
     # Predict the frame
-    results = model.predict(frame, verbose=verbose, device=0)
+    results = model.predict(frame, verbose=verbose, device=device)
     img = np.squeeze(results[0].plot()) # Convert to numpy array
 
     # Show the frame in opencv window
