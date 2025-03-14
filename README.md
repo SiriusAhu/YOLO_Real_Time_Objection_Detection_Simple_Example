@@ -37,7 +37,9 @@ conda activate <env_name>
 
 ## 4. Install the required packages
 
-### 4.1 I won't use GPU
+> You can choose to install the packages in two ways: `CPU` or `GPU` version.
+
+### 4.1 I won't use GPU: Directly install `ultralytics`
 
 `UltraLytics` provides a fantastic module called `ultralytics`, which contains almost all the required packages for using `yolo`.
 
@@ -47,32 +49,21 @@ So you can just install `ultralytics` by:
 pip install ultralytics
 ```
 
-### 4.2 I need GPU (A recommended way)
+### 4.2 I need GPU: Manually install `torch`, `torchaudio`, `torchvision`, then install `ultralytics`
 
 Unfortunately, by testing, I found that `ultralytics` sometimes doesn't download GPU version of `torch`, `torchaudio` and `torchvision` correctly.
 
 Instead you need to install them manually.
 
-> You can get files from this website: [torch stable download](https://download.pytorch.org/whl/torch_stable.html)
-> Note: the versions with `cuXXX` are for GPU.
+Follow the `INSTALL PYTORCH` part in the [PyTorch official website](https://pytorch.org) to install `torch`, `torchaudio` and `torchvision` first.
 
-### 4.3 I need GPU (A not recommended way)
-
-A not recommended way is to install them by (if you're using `CUDA 18` | `cuda` version can be checked by `nvcc --version`):
+The command is like this (but don't just copy and paste it, you need to check the website for the correct command):
 
 ```bash
-pip install torch torchaudio torchvision --index-url https://download.pytorch.org/whl/cu118
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
-> For other cuda versions, replace `cu118` with `cuXXX`
-
-However, this method sometimes downloads `CPU` version of them.
-
-E.g. Today (2024.2.9), I used this way but found `torchvision` is `CPU` version.
-
-If you also encounter this problem, you can download the `whl` file from the website mentioned above ([torch stable download](https://download.pytorch.org/whl/torch_stable.html)) and install it manually.
-
-### 4.4 Check the installation
+### 4.3 Check the installation
 
 You can use this command to check the installation:
 
@@ -81,6 +72,15 @@ pip freeze
 ```
 
 > You can check if `torch`, `torchaudio`, `torchvision` and `ultralytics` are GPU versions by checking whether they contain `cuXXX` in their names.
+
+Then for further check if you install `torch` correctly, you can run the following code in `Python`:
+
+```python
+import torch
+print(torch.cuda.is_available())
+```
+
+If it returns `True`, then you have installed `torch` correctly.
 
 ## 5. Run the program
 

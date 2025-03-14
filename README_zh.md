@@ -39,7 +39,7 @@ conda activate <env_name>
 
 ## 4. 安装所需的包
 
-### 4.1 我不使用GPU
+### 4.1 我不使用GPU（直接安装`ultralytics`）
 
 `UltraLytics`提供了一个名为`ultralytics`的奇妙模块，其中包含了几乎所有使用`yolo`所需的包。
 
@@ -49,32 +49,17 @@ conda activate <env_name>
 pip install ultralytics
 ```
 
-### 4.2 我需要GPU（推荐的方式）
+### 4.2 我需要GPU（手动安装`torch`、`torchaudio`、`torchvision`，然后安装`ultralytics`）
+不幸的是，通过测试，我发现`ultralytics`有时无法正确下载GPU版本的`torch`、`torchaudio`和`torchvision`。相反，你需要手动安装它们。
 
-不幸的是，通过测试，我发现`ultralytics`有时无法正确下载`torch`、`torchaudio`和`torchvision`的GPU版本。
+请按照[PyTorch官方网站](https://pytorch.org)中的`INSTALL PYTORCH`部分首先安装`torch`、`torchaudio`和`torchvision`。
 
-相反，你需要手动安装它们。
-
-> 你可以从这个网站获取文件：[torch stable download](https://download.pytorch.org/whl/torch_stable.html)
-> 注意：带有`cuXXX`的版本是用于GPU的。
-
-### 4.3 我需要GPU（不推荐的方式）
-
-一个不推荐的方式是通过以下命令安装它们（如果你使用的是`CUDA 18`。cuda版本可以通过`nvcc --version`检查）：
+命令类似于（但不要直接复制粘贴，你需要检查网站以获取正确的命令）：
 
 ```bash
-pip install torch torchaudio torchvision --index-url https://download.pytorch.org/whl/cu118
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
-
-> 对于其他cuda版本，请将`cu118`替换为`cuXXX`
-
-然而，这种方法有时会下载它们的`CPU`版本。
-
-例如，今天（2024.2.9），我使用了这种方式，但发现`torchvision`是`CPU`版本。
-
-如果你也遇到了这个问题，你可以从上面提到的网站（[torch stable download](https://download.pytorch.org/whl/torch_stable.html)）下载`whl`文件，并手动安装它。
-
-### 4.4 检查安装
+### 4.3 检查安装
 
 你可以使用以下命令检查安装：
 
@@ -83,6 +68,14 @@ pip freeze
 ```
 
 > 你可以通过检查它们的名称中是否包含`cuXXX`来检查`torch`、`torchaudio`、`torchvision`和`ultralytics`是否是GPU版本。
+
+然后，为了进一步检查你是否正确安装了`torch`，你可以在`Python`中运行以下代码：
+
+```python
+import torch
+print(torch.cuda.is_available())
+```
+如果返回`True`，那么你已经正确安装了`torch`。
 
 ## 5. 运行程序
 
